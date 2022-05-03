@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => MyHomePage(title:"Home Page"),
+    },
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -95,6 +100,15 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            RaisedButton(
+              child: Text('Click Me!'),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(builder: (context) => new ChampionDetails(championName:"Bard")),
+                );
+              },
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -110,6 +124,28 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class ChampionDetails extends StatelessWidget {
+  ChampionDetails({required this.championName});
+  final String championName;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(championName),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Back!'),
+        ),
+      ),
     );
   }
 }
