@@ -9,11 +9,11 @@ class Deck {
     // Initialization code goes here.
     cartes.add(Carte("first", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
     cartes.add(Carte("deux", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
-    cartes.add(Carte("trois", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
-    cartes.add(Carte("quatre", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
-    cartes.add(Carte("cinq", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
+    cartes.add(Carte("troissssssss", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
+    cartes.add(Carte("quatressssssss", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
+    cartes.add(Carte("cinqssssssssssssssssssssssssss", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
     cartes.add(Carte("six", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
-    cartes.add(Carte("sept", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
+    cartes.add(Carte("septazeazeae eaeazazee", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
     prix = 7;
   }
 
@@ -27,5 +27,9 @@ class Deck {
 
   String getImagePremiereCarte(){
     return cartes[0].getImageUrl();
+  }
+
+  List<Carte> getCartes(){
+    return cartes;
   }
 }

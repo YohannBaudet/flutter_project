@@ -7,6 +7,10 @@ class Carte  {
     // Initialization code goes here.
   }
 
+  String getName(){
+    return name;
+  }
+
   String getImageUrl(){
     return imageUrl;
   }

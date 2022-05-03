@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/Deck.dart';
+import 'package:flutter_project/deckDetails.dart';
 
 class MesDecks extends StatelessWidget {
 
@@ -29,7 +30,14 @@ class MesDecks extends StatelessWidget {
             child: Center(child: GestureDetector(
               onTap: () {}, // Image tapped
               child: InkWell(
-                onTap: () {}, // Image tapped
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                      builder: (context) => DeckDetails(deck: test[index]),
+                  ),
+                  );
+                }, // Image tapped
                 splashColor: Colors.white10, // Splash color over image
                 child: Ink.image(
                   fit: BoxFit.cover, // Fixes border issues
