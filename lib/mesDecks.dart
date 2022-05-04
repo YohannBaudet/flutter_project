@@ -20,7 +20,7 @@ class _MesDecksState  extends State<MesDecks>{
   @override
   void initState() {
     super.initState();
-    //_loadDeck();
+    _loadDeck();
   }
 
   //Loading counter value on start
@@ -28,6 +28,7 @@ class _MesDecksState  extends State<MesDecks>{
     prefs = await SharedPreferences.getInstance();
     String jsonListDeck = (prefs.getString("decks") ?? "");
     if (jsonListDeck == ""){
+      test = <Deck>[];
       prefs.setString("decks", jsonEncode(test));
     }
     else{
