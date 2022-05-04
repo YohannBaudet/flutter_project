@@ -16,6 +16,17 @@ class Deck {
     cartes.add(Carte("septazeazeae eaeazazee", "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg"));
     prix = 7;
   }
+  Deck.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        prix = json['prix'],
+        cartes = List<Carte>.from(json['cartes'].map((i) => Carte.fromJson(i)));
+
+  Map toJson() => {
+    'name': name,
+    'prix': prix,
+    'cartes': cartes
+  };
+
 
   String getName(){
     return name;

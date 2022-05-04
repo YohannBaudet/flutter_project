@@ -7,6 +7,15 @@ class Carte  {
     // Initialization code goes here.
   }
 
+  Carte.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        imageUrl = json['imageUrl'];
+
+  Map toJson() => {
+    'name': name,
+    'imageUrl': imageUrl,
+  };
+
   String getName(){
     return name;
   }
