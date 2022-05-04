@@ -38,7 +38,7 @@ class _MesDecksState  extends State<MesDecks>{
   }
 
   void saveDecks() async {
-    final prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     prefs.setString("decks", jsonEncode(test));
   }
 
@@ -111,7 +111,7 @@ class _MesDecksState  extends State<MesDecks>{
                         fit: BoxFit.cover, // Fixes border issues
                         width: 100,
                         height: 150,
-                        image: Image.network(item.getImagePremiereCarte(),    height: 120,).image
+                        image: item.cartes.isEmpty ? AssetImage('assets/carteFond.png') : NetworkImage(item.getImagePremiereCarte()) as ImageProvider
                     ),
                   ),
                 )),
