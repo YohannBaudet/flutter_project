@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/Deck.dart';
 import 'package:flutter_project/deckDetails.dart';
+import 'package:flutter_project/services/PreferenceUtils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MesDecks extends StatefulWidget {
@@ -14,38 +15,20 @@ class MesDecks extends StatefulWidget {
 class _MesDecksState  extends State<MesDecks>{
   final String _title = "Mes Decks";
 
-  //List<Deck> test = List<Deck>.generate(20, (index) => Deck("name "+ index.toString()));
   late SharedPreferences prefs;
-  late List<Deck> test;
+
+  PreferenceUtils preferenceUtils = PreferenceUtils();
+
   @override
   void initState() {
     super.initState();
-    _loadDeck();
-  }
-
-  //Loading counter value on start
-  Future<List<Deck>> _loadDeck() async {
-    prefs = await SharedPreferences.getInstance();
-    String jsonListDeck = (prefs.getString("decks") ?? "");
-    if (jsonListDeck == ""){
-      test = <Deck>[];
-      prefs.setString("decks", jsonEncode(test));
-    }
-    else{
-      test = List<Deck>.from(jsonDecode(prefs.getString("decks").toString()).map((i) => Deck.fromJson(i)));
-    }
-    return test;
-  }
-
-  void saveDecks() async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.setString("decks", jsonEncode(test));
+    preferenceUtils.loadDeck();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-    future: _loadDeck(),
+    future: preferenceUtils.loadDeck(),
     builder: (context, snapshot) {
       if (snapshot.hasData) {
         return Scaffold(
@@ -62,9 +45,9 @@ class _MesDecksState  extends State<MesDecks>{
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    setState((){ test.add(Deck("Nouveau deck")); });
-                    saveDecks();
-                    print(test.length);
+                    setState((){ preferenceUtils.getDeck.add(Deck("Nouveau deck")); });
+                    preferenceUtils.saveDecks();
+                    print(preferenceUtils.getDeck.length);
                   },
                 ),),
               Padding(
@@ -76,9 +59,9 @@ class _MesDecksState  extends State<MesDecks>{
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    setState((){ test.removeLast(); });
-                    saveDecks();
-                    print(test.length);
+                    setState((){ preferenceUtils.getDeck.removeLast(); });
+                    preferenceUtils.saveDecks();
+                    print(preferenceUtils.getDeck.length);
                   },
                 ),)
 
@@ -89,20 +72,22 @@ class _MesDecksState  extends State<MesDecks>{
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: (1 / 1)),
-            itemCount: test.length,
+            itemCount: preferenceUtils.getDeck.length,
             itemBuilder: (context,index){
-              final item = test[index];
+              final item = preferenceUtils.getDeck[index];
 
               return GridTile(
                 header: Center(child: Text(item.getName()),),
                 child: Center(child: GestureDetector(
-                  onTap: () {}, // Image tapped
+                  onTap: () {
+                    preferenceUtils.saveDecks();
+                  }, // Image tapped
                   child: InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DeckDetails(deck: test[index]),
+                          builder: (context) => DeckDetails(deck: preferenceUtils.getDeck[index]),
                         ),
                       );
                     }, // Image tapped
