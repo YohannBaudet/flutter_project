@@ -47,7 +47,6 @@ class _MesDecksState  extends State<MesDecks>{
                   onPressed: () {
                     setState((){ preferenceUtils.getDeck.add(Deck("Nouveau deck")); });
                     preferenceUtils.saveDecks();
-                    print(preferenceUtils.getDeck.length);
                   },
                 ),),
               Padding(
@@ -61,7 +60,6 @@ class _MesDecksState  extends State<MesDecks>{
                   onPressed: () {
                     setState((){ preferenceUtils.getDeck.removeLast(); });
                     preferenceUtils.saveDecks();
-                    print(preferenceUtils.getDeck.length);
                   },
                 ),)
 
