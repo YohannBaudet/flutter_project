@@ -11,16 +11,18 @@ class Recherche extends StatelessWidget {
 
   final String _title = "Recherche";
 
+  const Recherche({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: TypeAheadField<Carte?>(
 
           hideSuggestionsOnKeyboardHide: false,
-          debounceDuration: Duration(milliseconds: 500),
-          textFieldConfiguration: TextFieldConfiguration(
+          debounceDuration: const Duration(milliseconds: 500),
+          textFieldConfiguration: const TextFieldConfiguration(
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
@@ -41,7 +43,7 @@ class Recherche extends StatelessWidget {
           },
           noItemsFoundBuilder: (context)=>Container(
             height: 100,
-            child:Center(
+            child:const Center(
               child: Text(
                 "Pas de carte trouver",
                 style: TextStyle(fontSize: 24),
