@@ -84,7 +84,7 @@ class _DeckDetailsState extends State<DeckDetails> {
                       child: InkWell(
                         child: Center(child: Container(
                           padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
-                          child: Image.network(item.getImageUrl()),
+                          child: Image.network(item.getImageUrl_small()),
                         )),
                         onTap: () {
                           Navigator.push(
@@ -122,9 +122,7 @@ class _DeckDetailsState extends State<DeckDetails> {
   }
 
   void deleteCarte(Carte carte){
-    print(deck.getCartes().length);
     setState((){ deck.getCartes().remove(carte);});
-    print(deck.getCartes().length);
   }
 }
 

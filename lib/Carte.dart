@@ -41,4 +41,12 @@ class Carte  {
     img_url:json['card_images'][0]['image_url'],
 
   );
+
+  static Carte fromJson2(Map<String, dynamic> json) => Carte(
+    id:json['id'],
+    name : json['name'],
+    img_url_small: json['image_url_small'],
+    img_url:json['image_url'],
+
+  );
 }

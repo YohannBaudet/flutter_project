@@ -37,6 +37,7 @@ class PreferenceUtils {
   }
 
   Future<List<Deck>> loadDeck() async {
+    prefs = await SharedPreferences.getInstance();
     String jsonListDeck = (prefs.getString("decks") ?? "");
     if (jsonListDeck == ""){
       test = <Deck>[];
