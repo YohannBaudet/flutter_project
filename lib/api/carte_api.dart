@@ -2,17 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-class Carte {
-  final String name;
+import '../Carte.dart';
 
-  const Carte({
-    required this.name,
-  });
-
-  static Carte fromJson(Map<String, dynamic> json) => Carte(
-    name : json['name'],
-  );
-}
 
 class CarteApi {
   static Future<List<Carte>> getCarteSuggestions(String query) async {
