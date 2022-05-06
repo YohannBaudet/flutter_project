@@ -30,6 +30,31 @@ class _DeckDetailsState extends State<DeckDetails> {
     _title = deck.getName();
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child:
+            PopupMenuButton(
+              icon: const Icon(
+                  Icons.edit,
+              ),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: TextFormField(
+                      initialValue: deck.name,
+                      onFieldSubmitted: (String value) async {
+                        setState((){ deck.name = value; });
+                        preferenceUtils.saveDecks();
+                      },
+                    ),
+                  )
+                ];
+              },
+            ),
+            ),
+        ],
         title: Text(_title),
         backgroundColor: Colors.blue,
       ),
@@ -84,7 +109,7 @@ class _DeckDetailsState extends State<DeckDetails> {
                       ),
                       child: InkWell(
                         child: Center(child: Container(
-                          padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 52, 0, 2),
                           child: Image.network(item.getImageUrl_small()),
                         )),
                         onTap: () {

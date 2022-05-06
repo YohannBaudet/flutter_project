@@ -31,7 +31,7 @@ class Recherche extends StatelessWidget {
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
-              hintText: "chercher une carte",
+              hintText: "Chercher une carte",
             )
           ),
           suggestionsCallback: CarteApi.getCarteSuggestions,
