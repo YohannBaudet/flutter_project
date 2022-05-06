@@ -52,7 +52,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             label: 'Decks',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.search),
             label: 'Recherche',
           ),
         ],
