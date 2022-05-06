@@ -70,35 +70,68 @@ class _MesDecksState  extends State<MesDecks>{
             padding: const EdgeInsets.fromLTRB(5,16,5,16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: (1 / 1)),
+                childAspectRatio: (1 / 1.2)),
             itemCount: preferenceUtils.getDeck.length,
             itemBuilder: (context,index){
               final item = preferenceUtils.getDeck[index];
 
-              return GridTile(
-                header: Center(child: Text(item.getName()),),
-                child: Center(child: GestureDetector(
-                  onTap: () {
-                    preferenceUtils.saveDecks();
-                  }, // Image tapped
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DeckDetails(deck: preferenceUtils.getDeck[index]),
+              return Card(
+                elevation: 6,
+                child: Container(
+                  child:
+                  GridTile(
+                    header: SizedBox(
+                      height: 50,
+                      child: GridTileBar(
+                          backgroundColor: Colors.blueAccent,
+                          title: Text(item.getName(),
+                            style: TextStyle(color: Colors.black),
+                            softWrap: true,
+                            overflow: TextOverflow.clip,
+                          ),
+                        trailing: PopupMenuButton(
+                          icon: const Icon(
+                            Icons.edit,
+                          ),
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                value: 'delete',
+                                child: TextFormField(
+                                  initialValue: item.name,
+                                  onFieldSubmitted: (String value) async {
+                                    setState((){ item.name = value; });
+                                    preferenceUtils.saveDecks();
+                                  },
+                                ),
+                              )
+                            ];
+                          },
                         ),
-                      );
-                    }, // Image tapped
-                    splashColor: Colors.white10, // Splash color over image
-                    child: Ink.image(
-                        fit: BoxFit.cover, // Fixes border issues
-                        width: 100,
-                        height: 150,
-                        image: item.cartes.isEmpty ? AssetImage('assets/carteFond.png') : NetworkImage(item.getImagePremiereCarte()) as ImageProvider
+                      ),
                     ),
+                    child: InkWell(
+                        onTap: (){
+                          preferenceUtils.saveDecks();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DeckDetails(deck: preferenceUtils.getDeck[index]),
+                            ),
+                          );
+                        },
+                        splashColor: Colors.white10, // Splash color over image
+                        child: Center(
+                          child: Container(
+                            child: Ink.image(
+                                image: item.cartes.isEmpty ? AssetImage('assets/carteFond.png') : NetworkImage(item.getImagePremiereCarte()) as ImageProvider
+                            ),
+                            padding: const EdgeInsets.fromLTRB(0, 52, 0, 2),
+                          ),
+                        )
+                      )
                   ),
-                )),
+                ),
               );
             },
           ),
@@ -107,6 +140,43 @@ class _MesDecksState  extends State<MesDecks>{
       return CircularProgressIndicator(); // or some other widget
     },
   );
+  }
+}
+
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key}) : super(key: key);
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  String dropdownValue = 'One';
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownValue = newValue!;
+        });
+      },
+      items: <String>['One', 'Two', 'Free', 'Four']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
   }
 }
 
