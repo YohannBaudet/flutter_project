@@ -27,6 +27,7 @@ class _MesDecksState  extends State<MesDecks>{
 
   @override
   Widget build(BuildContext context) {
+    print('ok');
     return FutureBuilder(
     future: decks,
     builder: (context, snapshot) {

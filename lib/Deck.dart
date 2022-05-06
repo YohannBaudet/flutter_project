@@ -7,13 +7,13 @@ class Deck {
 
   Deck(this.name) {
     // Initialization code goes here.
-    cartes.add(Carte(name: "first", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
+    /*cartes.add(Carte(name: "first", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
     cartes.add(Carte(name: "2dn", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
     cartes.add(Carte(name: "thirst", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
     cartes.add(Carte(name: "quatre", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
     cartes.add(Carte(name: "cinq", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
     cartes.add(Carte(name: "sixxxxxxxxxxxxxxxxx", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
-    cartes.add(Carte(name: "sevennnnnnnnnn vennnnsss", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
+    cartes.add(Carte(name: "sevennnnnnnnnn vennnnsss", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));*/
     prix = 7;
   }
   Deck.fromJson(Map<String, dynamic> json)
@@ -42,5 +42,13 @@ class Deck {
 
   List<Carte> getCartes(){
     return cartes;
+  }
+
+  double getPrixDeck(){
+    double res = 0;
+    for (Carte c in cartes){
+      res+=double.parse(c.prix);
+    }
+    return res;
   }
 }

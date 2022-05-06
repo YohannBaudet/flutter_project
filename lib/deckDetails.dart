@@ -35,7 +35,7 @@ class _DeckDetailsState extends State<DeckDetails> {
       ),
       body: Column(
         children: [
-          Text("testst"),
+          Text("Prix du deck : "+deck.getPrixDeck().toString()),
           Expanded(child: GridView.builder(
             scrollDirection: Axis.vertical,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
