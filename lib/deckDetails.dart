@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project/Carte.dart';
 import 'package:flutter_project/Deck.dart';
 import 'package:flutter_project/carteDetails.dart';
+import 'package:flutter_project/recherche.dart';
 import 'package:flutter_project/services/PreferenceUtils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -107,7 +108,9 @@ class _DeckDetailsState extends State<DeckDetails> {
           Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _navigateAndDisplaySelection(context);
+                },
                 icon: Icon( // <-- Icon
                   Icons.add,
                   size: 24.0,
@@ -123,6 +126,25 @@ class _DeckDetailsState extends State<DeckDetails> {
 
   void deleteCarte(Carte carte){
     setState((){ deck.getCartes().remove(carte);});
+  }
+  void addCarte(Carte carte){
+    setState((){ deck.getCartes().add(carte);});
+  }
+
+  // A method that launches the SelectionScreen and awaits the result from
+  // Navigator.pop.
+  void _navigateAndDisplaySelection(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Recherche(precedent: "mesDecks",)),
+    );
+
+    if(result!=null){
+      addCarte(result);
+      preferenceUtils.saveDecks();
+    }
   }
 }
 

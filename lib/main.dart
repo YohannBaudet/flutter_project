@@ -30,7 +30,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
     MesDecks(),
-    Recherche()
+    Recherche(precedent: "main",)
   ];
 
   void _onItemTapped(int index) {

@@ -15,20 +15,20 @@ class MesDecks extends StatefulWidget {
 class _MesDecksState  extends State<MesDecks>{
   final String _title = "Mes Decks";
 
-  late SharedPreferences prefs;
-
   PreferenceUtils preferenceUtils = PreferenceUtils();
+
+  late Future<List<Deck>> decks;
 
   @override
   void initState() {
     super.initState();
-    preferenceUtils.loadDeck();
+    decks = preferenceUtils.loadDeck();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-    future: preferenceUtils.loadDeck(),
+    future: decks,
     builder: (context, snapshot) {
       if (snapshot.hasData) {
         return Scaffold(
