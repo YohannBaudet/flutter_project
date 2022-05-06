@@ -56,7 +56,7 @@ class _CarteDetailsState extends State<CarteDetails> {
                   Image(
                     image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
                   ),
-                  MyStatefulWidget(),
+                  MyStatefulWidget(listeDetail: snapshot.data,),
                 ],
 
               )
@@ -67,17 +67,34 @@ class _CarteDetailsState extends State<CarteDetails> {
     );
   }
 }
+
+
   class MyStatefulWidget extends StatefulWidget {
-    const MyStatefulWidget({Key? key}) : super(key: key);
+    MyStatefulWidget({Key? key, this.listeDetail}) : super(key: key);
+    Map<String, dynamic>? listeDetail;
     @override
-    State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+    State<MyStatefulWidget> createState() => _MyStatefulWidgetState(listeDetail: listeDetail);
   }
 
   class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  String dropdownValue = 'One';
+    _MyStatefulWidgetState({this.listeDetail});
+    Map<String, dynamic>? listeDetail;
+
+  String dropdownValue = '';
+  List<String> valueDropdown = [];
+
+    @override
+    void initState() {
+      super.initState();
+      valueDropdown = getListeSets(listeDetail);
+      dropdownValue = valueDropdown[0];
+    }
 
   @override
   Widget build(BuildContext context) {
+
+    print(dropdownValue);
+    print(valueDropdown);
     return DropdownButton<String>(
       value: dropdownValue,
         icon: const Icon(Icons.arrow_downward),
@@ -89,17 +106,40 @@ class _CarteDetailsState extends State<CarteDetails> {
       ),
       onChanged: (String? newValue) {
           setState(() {
+            print("aaaaaaaaaaaaaaaaa");
               dropdownValue = newValue!;
+              print(dropdownValue);
         });
       },
-        items: <String>['One', 'Two', 'Free', 'Four']
+        items: valueDropdown
       .map<DropdownMenuItem<String>>((String value) {
-  return DropdownMenuItem<String>(
-  value: value,
-  child: Text(value),
-  );
-  }).toList(),
-  );
-  }
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+      }).toList(),
+      );
+    }
+
+    List<String> getListeSets(Map<String, dynamic>? listeDetails){
+    //print(listeDetails);
+        List<String> sets = [];
+        if(listeDetails != null){
+          for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
+            sets.add(set['set_name']);
+
+          }
+          return sets;
+        }
+        return [];
+    }
+
   }
 
+class setCarte{
+  String set_;
+  String rarete;
+  int prix;
+
+  setCarte({required this.set_, required this.rarete, required this.prix});
+}
