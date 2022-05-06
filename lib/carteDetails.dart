@@ -13,11 +13,12 @@ class CarteDetails extends StatefulWidget {
   _CarteDetailsState createState() => _CarteDetailsState(carte:carte);
 }
 
-class _CarteDetailsState extends State<CarteDetails>{
+class _CarteDetailsState extends State<CarteDetails> {
 
   _CarteDetailsState({required this.carte});
+
   final Carte carte;
-  late Future<Map<String,dynamic>> listeDetail;
+  late Future<Map<String, dynamic>> listeDetail;
 
   @override
   void initState() {
@@ -25,11 +26,12 @@ class _CarteDetailsState extends State<CarteDetails>{
     listeDetail = getDetailsCarte(carte.id);
   }
 
-  Future<Map<String,dynamic>> getDetailsCarte(int idCarte) async {
-    final response = await http.get(Uri.parse('https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr&id=$idCarte'));
+  Future<Map<String, dynamic>> getDetailsCarte(int idCarte) async {
+    final response = await http.get(Uri.parse(
+        'https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr&id=$idCarte'));
     print(response.statusCode);
     if (response.statusCode == 200) {
-      Map<String,dynamic> data = json.decode(response.body);
+      Map<String, dynamic> data = json.decode(response.body);
       //print(data);
       return data;
     } else {
@@ -40,19 +42,64 @@ class _CarteDetailsState extends State<CarteDetails>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return FutureBuilder(
-      future : listeDetail,
-      builder: (context, AsyncSnapshot<Map<String,dynamic>>snapshot){
-        if (snapshot.hasData){
-          return Scaffold(
-            appBar: AppBar(
-              title: Text((snapshot.data?['data'][0]['id']).toString()),
-            ),
-          );
+        future: listeDetail,
+        builder: (context, AsyncSnapshot<Map<String, dynamic>>snapshot) {
+          if (snapshot.hasData) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text((snapshot.data?['data'][0]['name']).toString()),
+              ),
+              body: Column(
+                children: [
+                  Image(
+                    image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
+                  ),
+                  MyStatefulWidget(),
+                ],
+
+              )
+            );
+          }
+          return CircularProgressIndicator();
         }
-        return CircularProgressIndicator();
-      }
     );
   }
 }
+  class MyStatefulWidget extends StatefulWidget {
+    const MyStatefulWidget({Key? key}) : super(key: key);
+    @override
+    State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+  }
+
+  class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  String dropdownValue = 'One';
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+        icon: const Icon(Icons.arrow_downward),
+          elevation: 16,
+          style: const TextStyle(color: Colors.deepPurple),
+          underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+          setState(() {
+              dropdownValue = newValue!;
+        });
+      },
+        items: <String>['One', 'Two', 'Free', 'Four']
+      .map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+  value: value,
+  child: Text(value),
+  );
+  }).toList(),
+  );
+  }
+  }
+
