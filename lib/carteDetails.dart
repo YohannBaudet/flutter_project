@@ -75,7 +75,7 @@ class _CarteDetailsState extends State<CarteDetails> {
     if(listeDetails != null){
       for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
         print(set);
-        String val = set['set_name'] + " | " + set['set_rarity_code'] + " | " + set['set_price'] + "€";
+        String val = set['set_name'] + "  |  " + set['set_rarity_code'] + "  |  " + set['set_price'] + "€";
         sets.add(val);
         SetCarte setc = SetCarte(idCarte: carte.getId(), set_: set['set_name'], rarete: set['set_rarity_code'], prix: double.parse(set['set_price']));
         mapSet[set['set_name']] = setc;
@@ -92,9 +92,10 @@ class _CarteDetailsState extends State<CarteDetails> {
         TextButton(
 
           onPressed: () {
-            print(mapDeck[mesDeckToStringId[index]]?.getName());
+            print(mapDeck[mesDeckToStringId[index]]?.getName()); //le deck
             print("AVANT");
-            print(val);
+            print(val); //le set selectionne (format avec 2 espaces à la fin du string)
+            print(mapSet[val.substring(0,val.length-2)]?.getPrix()); //le setCarte
             print("APRES");
           },
           child: Text('Ajouter au deck'),
@@ -122,13 +123,19 @@ class _CarteDetailsState extends State<CarteDetails> {
               appBar: AppBar(
                 title: Text((snapshot.data?['data'][0]['name']).toString()),
               ),
-              body: ListView(
+              body: Padding(
+                padding: EdgeInsets.all(30.0),
+                child: ListView(
                 children: [
                   Column(
                     children: [
+
                       Image(
-                        height: 500,
+                        height: 400,
                         image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
+                      ),
+                      Text(
+                          snapshot.data?['data'][0]['desc']
                       ),
 
                       MyStatefulWidget(listeDropdown: listeDropdown,message: "Aucun set n'existe pour cette carte",setVal: setVal,),
@@ -136,23 +143,13 @@ class _CarteDetailsState extends State<CarteDetails> {
                         child: Column(
                           children:
                             _createChildren(),
-                            /*MyStatefulWidget(listeDropdown: mesDeckToString,message: "Vous n'avez aucun deck",test: test,),
-                            TextButton(
-                              style: ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                              ),
-                              onPressed: () {
-                                print(test);
-                              },
-                              child: Text('TextButton'),
-                            )*/
-
                         ),
                       )
                     ],
 
                   )
                 ],
+              )
               )
 
             );
@@ -231,4 +228,20 @@ class SetCarte{
   double prix;
 
   SetCarte({required this.idCarte,required this.set_, required this.rarete, required this.prix});
+
+  double getPrix(){
+    return prix;
+  }
+
+  String getRarete(){
+    return rarete;
+  }
+
+  String getSet(){
+    return set_;
+  }
+
+  int getIdCarte(){
+    return idCarte;
+  }
 }
