@@ -46,7 +46,8 @@ class _MesDecksState  extends State<MesDecks>{
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    setState((){ preferenceUtils.getDeck.add(Deck("Nouveau deck")); });
+                    int id = preferenceUtils.getId();
+                    setState((){ preferenceUtils.getDeck.add(Deck(id,"Nouveau deck")); });
                     preferenceUtils.saveDecks();
                   },
                 ),),
