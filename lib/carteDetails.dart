@@ -30,7 +30,7 @@ class _CarteDetailsState extends State<CarteDetails> {
   List<int> mesDeckToStringId = [];
   Map<String, SetCarte> mapSet = {};
   Map<int, Deck> mapDeck = {};
-  String val = '';
+  String val = 'HHHHHHH';
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _CarteDetailsState extends State<CarteDetails> {
     if(listeDetails != null){
       for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
         print(set);
-        String val = set['set_name'] + " - " + set['set_rarity_code'] + " - " + set['set_price'] + "€";
+        String val = set['set_name'] + " | " + set['set_rarity_code'] + " | " + set['set_price'] + "€";
         sets.add(val);
         SetCarte setc = SetCarte(idCarte: carte.getId(), set_: set['set_name'], rarete: set['set_rarity_code'], prix: double.parse(set['set_price']));
         mapSet[set['set_name']] = setc;
@@ -92,8 +92,10 @@ class _CarteDetailsState extends State<CarteDetails> {
         TextButton(
 
           onPressed: () {
-            print(mapDeck[mesDeckToStringId[index]]);
+            print(mapDeck[mesDeckToStringId[index]]?.getName());
+            print("AVANT");
             print(val);
+            print("APRES");
           },
           child: Text('Ajouter au deck'),
         )
@@ -104,7 +106,9 @@ class _CarteDetailsState extends State<CarteDetails> {
     });
   }
   void setVal(String val_){
+    print("dans le setVal");
       val = val_;
+      print(val);
   }
 
   @override
@@ -181,6 +185,7 @@ class _CarteDetailsState extends State<CarteDetails> {
       super.initState();
       if(listeDropdown.isNotEmpty){
         dropdownValue = listeDropdown[0];
+        setVal(dropdownValue.split('|')[0]);
       }
       else{
         dropdownValue = message;
@@ -204,7 +209,7 @@ class _CarteDetailsState extends State<CarteDetails> {
           setState(() {
             print("aaaaaaaaaaaaaaaaa");
               dropdownValue = newValue!;
-              setVal(dropdownValue.split('-')[0]);
+              setVal(dropdownValue.split('|')[0]);
         });
       },
         items: listeDropdown
