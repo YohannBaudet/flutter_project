@@ -22,10 +22,15 @@ class _CarteDetailsState extends State<CarteDetails> {
 
   final Carte carte;
   late Future<Map<String, dynamic>> listeDetail;
+  GlobalKey<_CarteDetailsState> globalKey = GlobalKey();
   PreferenceUtils preferenceUtils = PreferenceUtils();
+  List<String> listeDropdown = [];
   List mesDeck = [];
-  Map<String, setCarte> mapSet = {};
-  Map<String, Deck> mapDeck = {};
+  List<String> mesDeckToString = [];
+  List<int> mesDeckToStringId = [];
+  Map<String, SetCarte> mapSet = {};
+  Map<int, Deck> mapDeck = {};
+  String val = '';
 
   @override
   void initState() {
@@ -36,10 +41,15 @@ class _CarteDetailsState extends State<CarteDetails> {
     print(mesDeck);
   }
 
-  Map<String, Deck> getMapDeck(List decks){
-    Map<String, Deck> map = {};
+  Map<int, Deck> getMapDeck(List decks){
+    Map<int, Deck> map = {};
+    if(decks.isEmpty){
+      return map;
+    }
     for(Deck deck in decks){
-      map[deck.name] = deck;
+      map[deck.id] = deck;
+      mesDeckToString.add(deck.getName());
+      mesDeckToStringId.add(deck.id);
     }
     return map;
   }
@@ -58,12 +68,52 @@ class _CarteDetailsState extends State<CarteDetails> {
     }
   }
 
+  List<String> getListeSets(Map<String, dynamic>? listeDetails){
+    //print(listeDetails);
+    print("dans le getlisteset");
+    List<String> sets = [];
+    if(listeDetails != null){
+      for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
+        print(set);
+        String val = set['set_name'] + " - " + set['set_rarity_code'] + " - " + set['set_price'] + "€";
+        sets.add(val);
+        SetCarte setc = SetCarte(idCarte: carte.getId(), set_: set['set_name'], rarete: set['set_rarity_code'], prix: double.parse(set['set_price']));
+        mapSet[set['set_name']] = setc;
+      }
+      return sets;
+    }
+    return [];
+  }
+
+  List<Widget> _createChildren() {
+    return List<Widget>.generate(mesDeckToString.length, (int index) {
+      return Row(children : [
+          Text(mesDeckToString[index]),
+        TextButton(
+
+          onPressed: () {
+            print(mapDeck[mesDeckToStringId[index]]);
+            print(val);
+          },
+          child: Text('Ajouter au deck'),
+        )
+      ],
+
+      );
+
+    });
+  }
+  void setVal(String val_){
+      val = val_;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: listeDetail,
         builder: (context, AsyncSnapshot<Map<String, dynamic>>snapshot) {
           if (snapshot.hasData) {
+            listeDropdown = getListeSets(snapshot.data);
             return Scaffold(
               appBar: AppBar(
                 title: Text((snapshot.data?['data'][0]['name']).toString()),
@@ -77,24 +127,24 @@ class _CarteDetailsState extends State<CarteDetails> {
                         image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
                       ),
 
-                      MyStatefulWidget(listeDetail: snapshot.data,),
+                      MyStatefulWidget(listeDropdown: listeDropdown,message: "Aucun set n'existe pour cette carte",setVal: setVal,),
                       Center(
-                        child: Row(
-                          children: [
-                            MyStatefulWidget(listeDetail: snapshot.data,),
+                        child: Column(
+                          children:
+                            _createChildren(),
+                            /*MyStatefulWidget(listeDropdown: mesDeckToString,message: "Vous n'avez aucun deck",test: test,),
                             TextButton(
                               style: ButtonStyle(
                                 foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                               ),
-                              onPressed: () { },
+                              onPressed: () {
+                                print(test);
+                              },
                               child: Text('TextButton'),
-                            )
-                          ],
+                            )*/
+
                         ),
                       )
-
-
-
                     ],
 
                   )
@@ -111,31 +161,36 @@ class _CarteDetailsState extends State<CarteDetails> {
 
 
   class MyStatefulWidget extends StatefulWidget {
-    MyStatefulWidget({Key? key, this.listeDetail}) : super(key: key);
-    Map<String, dynamic>? listeDetail;
+    MyStatefulWidget({Key? key, required this.listeDropdown, required this.message, required this.setVal}) : super(key: key);
+    List<String> listeDropdown;
+    String message;
+    Function(String) setVal;
     @override
-    State<MyStatefulWidget> createState() => _MyStatefulWidgetState(listeDetail: listeDetail);
+    State<MyStatefulWidget> createState() => _MyStatefulWidgetState(listeDropdown: listeDropdown, message: message, setVal: setVal,);
   }
 
   class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-    _MyStatefulWidgetState({this.listeDetail});
-    Map<String, dynamic>? listeDetail;
-
-  String dropdownValue = '';
-  List<String> valueDropdown = [];
+    _MyStatefulWidgetState({required this.listeDropdown, required this.message, required this.setVal});
+    List<String> listeDropdown;
+    Function(String) setVal;
+    String message;
+    String dropdownValue = '';
 
     @override
     void initState() {
       super.initState();
-      valueDropdown = getListeSets(listeDetail);
-      dropdownValue = valueDropdown[0];
+      if(listeDropdown.isNotEmpty){
+        dropdownValue = listeDropdown[0];
+      }
+      else{
+        dropdownValue = message;
+        listeDropdown.add(dropdownValue);
+      }
+
     }
 
   @override
   Widget build(BuildContext context) {
-
-    print(dropdownValue);
-    print(valueDropdown);
     return DropdownButton<String>(
       value: dropdownValue,
         icon: const Icon(Icons.arrow_downward),
@@ -149,10 +204,10 @@ class _CarteDetailsState extends State<CarteDetails> {
           setState(() {
             print("aaaaaaaaaaaaaaaaa");
               dropdownValue = newValue!;
-              print(dropdownValue);
+              setVal(dropdownValue.split('-')[0]);
         });
       },
-        items: valueDropdown
+        items: listeDropdown
       .map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -162,28 +217,13 @@ class _CarteDetailsState extends State<CarteDetails> {
       );
     }
 
-    List<String> getListeSets(Map<String, dynamic>? listeDetails){
-    //print(listeDetails);
-        List<String> sets = [];
-        if(listeDetails != null){
-          for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
-            print(set);
-            String val = set['set_name'] + " - " + set['set_rarity_code'] + " - " + set['set_price'] + "€";
-            sets.add(val);
-
-          }
-          return sets;
-        }
-        return [];
-    }
-
   }
 
-class setCarte{
+class SetCarte{
   int idCarte;
   String set_;
   String rarete;
-  int prix;
+  double prix;
 
-  setCarte({required this.idCarte,required this.set_, required this.rarete, required this.prix});
+  SetCarte({required this.idCarte,required this.set_, required this.rarete, required this.prix});
 }
