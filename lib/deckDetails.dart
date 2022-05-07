@@ -30,31 +30,13 @@ class _DeckDetailsState extends State<DeckDetails> {
     _title = deck.getName();
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
+        /*actions: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 20.0),
             child:
-            PopupMenuButton(
-              icon: const Icon(
-                  Icons.edit,
-              ),
-              itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: TextFormField(
-                      initialValue: deck.name,
-                      onFieldSubmitted: (String value) async {
-                        setState((){ deck.name = value; });
-                        preferenceUtils.saveDecks();
-                      },
-                    ),
-                  )
-                ];
-              },
+
             ),
-            ),
-        ],
+        ],*/
         title: Text(_title),
         backgroundColor: Colors.blue,
       ),

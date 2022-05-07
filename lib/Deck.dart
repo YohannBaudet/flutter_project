@@ -1,11 +1,12 @@
 import 'package:flutter_project/Carte.dart';
 
 class Deck {
+  int id;
   String name;
   int prix = 0;
   List<Carte> cartes = <Carte>[];
 
-  Deck(this.name) {
+  Deck(this.id,this.name) {
     // Initialization code goes here.
     /*cartes.add(Carte(name: "first", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
     cartes.add(Carte(name: "2dn", img_url_small: "https://storage.googleapis.com/ygoprodeck.com/pics_small/37478723.jpg", img_url: "img_url", id: 1));
@@ -17,11 +18,13 @@ class Deck {
     prix = 7;
   }
   Deck.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : id = json['id'],
+        name = json['name'],
         prix = json['prix'],
         cartes = List<Carte>.from(json['cartes'].map((i) => Carte.fromJson2(i)));
 
   Map toJson() => {
+    'id': id,
     'name': name,
     'prix': prix,
     'cartes': cartes

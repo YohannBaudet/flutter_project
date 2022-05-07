@@ -44,6 +44,7 @@ class PreferenceUtils {
       prefs.setString("decks", jsonEncode(test));
     }
     else{
+      print(prefs.getString("decks").toString());
       test = List<Deck>.from(jsonDecode(prefs.getString("decks").toString()).map((i) => Deck.fromJson(i)));
     }
     return test;
@@ -52,5 +53,12 @@ class PreferenceUtils {
   void saveDecks(){
     prefs.setString("decks", jsonEncode(test));
   }
+
+  int getId() {
+    int res = (prefs.getInt("id") ?? 0);
+    prefs.setInt("id",res+1);
+    return res;
+  }
+
 
 }

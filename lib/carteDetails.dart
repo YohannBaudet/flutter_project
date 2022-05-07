@@ -73,6 +73,7 @@ class _CarteDetailsState extends State<CarteDetails> {
                   Column(
                     children: [
                       Image(
+                        height: 500,
                         image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
                       ),
 
