@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:flutter_project/services/PreferenceUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_project/Carte.dart';
+
+import 'Deck.dart';
 
 //import 'ListeDetailCarte.dart';
 //import 'api/carte_details_api.dart';
@@ -19,13 +22,27 @@ class _CarteDetailsState extends State<CarteDetails> {
 
   final Carte carte;
   late Future<Map<String, dynamic>> listeDetail;
+  PreferenceUtils preferenceUtils = PreferenceUtils();
+  List mesDeck = [];
+  Map<String, setCarte> mapSet = {};
+  Map<String, Deck> mapDeck = {};
 
   @override
   void initState() {
     super.initState();
     listeDetail = getDetailsCarte(carte.id);
+    mesDeck = preferenceUtils.getDeck;
+    mapDeck = getMapDeck(mesDeck);
+    print(mesDeck);
   }
 
+  Map<String, Deck> getMapDeck(List decks){
+    Map<String, Deck> map = {};
+    for(Deck deck in decks){
+      map[deck.name] = deck;
+    }
+    return map;
+  }
   Future<Map<String, dynamic>> getDetailsCarte(int idCarte) async {
     final response = await http.get(Uri.parse(
         'https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr&id=$idCarte'));
@@ -51,15 +68,38 @@ class _CarteDetailsState extends State<CarteDetails> {
               appBar: AppBar(
                 title: Text((snapshot.data?['data'][0]['name']).toString()),
               ),
-              body: Column(
+              body: ListView(
                 children: [
-                  Image(
-                    image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
-                  ),
-                  MyStatefulWidget(listeDetail: snapshot.data,),
-                ],
+                  Column(
+                    children: [
+                      Image(
+                        image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
+                      ),
 
+                      MyStatefulWidget(listeDetail: snapshot.data,),
+                      Center(
+                        child: Row(
+                          children: [
+                            MyStatefulWidget(listeDetail: snapshot.data,),
+                            TextButton(
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                              ),
+                              onPressed: () { },
+                              child: Text('TextButton'),
+                            )
+                          ],
+                        ),
+                      )
+
+
+
+                    ],
+
+                  )
+                ],
               )
+
             );
           }
           return CircularProgressIndicator();
@@ -126,7 +166,9 @@ class _CarteDetailsState extends State<CarteDetails> {
         List<String> sets = [];
         if(listeDetails != null){
           for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
-            sets.add(set['set_name']);
+            print(set);
+            String val = set['set_name'] + " - " + set['set_rarity_code'] + " - " + set['set_price'] + "€";
+            sets.add(val);
 
           }
           return sets;
@@ -137,9 +179,10 @@ class _CarteDetailsState extends State<CarteDetails> {
   }
 
 class setCarte{
+  int idCarte;
   String set_;
   String rarete;
   int prix;
 
-  setCarte({required this.set_, required this.rarete, required this.prix});
+  setCarte({required this.idCarte,required this.set_, required this.rarete, required this.prix});
 }
