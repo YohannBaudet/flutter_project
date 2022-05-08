@@ -147,11 +147,12 @@ class _DeckDetailsState extends State<DeckDetails> {
       context,
       MaterialPageRoute(builder: (context) => const Recherche(precedent: "mesDecks",)),
     );
-
+    print("ICIIIIIIIIIIIIIIII");
     if(result!=null){
       addCarte(result);
       preferenceUtils.saveDecks();
     }
+    setState((){});
   }
 }
 

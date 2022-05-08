@@ -15,81 +15,87 @@ class Recherche extends StatelessWidget {
   const Recherche({Key? key,required this.precedent}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text(_title),
-      backgroundColor: Colors.blue,
-    ),
-    body: SafeArea(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: TypeAheadField<Carte?>(
+  Widget build(BuildContext context) => WillPopScope(
+    onWillPop: () async {
+      Navigator.pop(context,null);
+      return false;
+    },
+    child:  Scaffold(
+      appBar: AppBar(
+        title: Text(_title),
+        backgroundColor: Colors.blue,
+      ),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: TypeAheadField<Carte?>(
 
-          hideSuggestionsOnKeyboardHide: false,
-          debounceDuration: const Duration(milliseconds: 500),
-          textFieldConfiguration: const TextFieldConfiguration(
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
-              hintText: "Chercher une carte",
-            )
-          ),
-          suggestionsCallback: CarteApi.getCarteSuggestions,
-          itemBuilder: (context,Carte? suggestion){
-            final carte = suggestion!;
-            //Fonctionnalité plus utilisée
-            if (precedent == "inutilisé"){
-              return ListTile(
-                leading: Image.network(
-                  carte.img_url,
-                  fit: BoxFit.cover,
-                ),
-                title: Text(carte.name),
-                trailing: IconButton(
-                  icon: const Icon(
-                    Icons.add,
-                    color: Colors.blue,
+            hideSuggestionsOnKeyboardHide: false,
+            debounceDuration: const Duration(milliseconds: 500),
+            textFieldConfiguration: const TextFieldConfiguration(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
+                  hintText: "Chercher une carte",
+                )
+            ),
+            suggestionsCallback: CarteApi.getCarteSuggestions,
+            itemBuilder: (context,Carte? suggestion){
+              final carte = suggestion!;
+              //Fonctionnalité plus utilisée
+              if (precedent == "inutilisé"){
+                return ListTile(
+                  leading: Image.network(
+                    carte.img_url,
+                    fit: BoxFit.cover,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context, carte);
-                  },
+                  title: Text(carte.name),
+                  trailing: IconButton(
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.blue,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, carte);
+                    },
+                  ),
+                );
+              }
+              else{
+                return ListTile(
+                  leading: Image.network(
+                    carte.img_url,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(carte.name),
+                );
+              }
+            },
+            noItemsFoundBuilder: (context)=>Container(
+              height: 100,
+              child:const Center(
+                child: Text(
+                  "Pas de carte trouver",
+                  style: TextStyle(fontSize: 24),
                 ),
-              );
-            }
-            else{
-              return ListTile(
-                leading: Image.network(
-                  carte.img_url,
-                  fit: BoxFit.cover,
-                ),
-                title: Text(carte.name),
-              );
-            }
-          },
-          noItemsFoundBuilder: (context)=>Container(
-            height: 100,
-            child:const Center(
-              child: Text(
-                "Pas de carte trouver",
-                style: TextStyle(fontSize: 24),
               ),
             ),
-          ),
 
-          onSuggestionSelected: (Carte? suggestion){
-            final carte = suggestion!;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CarteDetails(carte: carte)
-            ),
-            );
-
+            onSuggestionSelected: (Carte? suggestion){
+              final carte = suggestion!;
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CarteDetails(carte: carte)
+                ),
+              );
 
 
-        },
-        )
-        ,
+
+            },
+          )
+          ,
+        ),
       ),
     ),
   );
