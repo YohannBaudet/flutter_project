@@ -39,6 +39,7 @@ class _CarteDetailsState extends State<CarteDetails> {
     mesDeck = preferenceUtils.getDeck;
     mapDeck = getMapDeck(mesDeck);
     print(mesDeck);
+    print("INDICE " + carte.indice.toString());
   }
 
   Map<int, Deck> getMapDeck(List decks){
@@ -73,12 +74,14 @@ class _CarteDetailsState extends State<CarteDetails> {
     print("dans le getlisteset");
     List<String> sets = [];
     if(listeDetails != null){
+      int indiceCpt = 0;
       for(Map<String, dynamic> set in listeDetails['data'][0]['card_sets']){
         print(set);
         String val = set['set_name'] + "  |  " + set['set_rarity_code'] + "  |  " + set['set_price'] + "€";
         sets.add(val);
-        SetCarte setc = SetCarte(idCarte: carte.getId(), set_: set['set_name'], rarete: set['set_rarity_code'], prix: double.parse(set['set_price']));
+        SetCarte setc = SetCarte(idCarte: carte.getId(), set_: set['set_name'], rarete: set['set_rarity_code'], prix: double.parse(set['set_price']),indice: indiceCpt);
         mapSet[set['set_name']] = setc;
+        indiceCpt+=1;
       }
       return sets;
     }
@@ -97,6 +100,13 @@ class _CarteDetailsState extends State<CarteDetails> {
             print(val); //le set selectionne (format avec 2 espaces à la fin du string)
             print(mapSet[val.substring(0,val.length-2)]?.getPrix()); //le setCarte
             print("APRES");
+            print(mapSet[val.substring(0,val.length-2)]?.getIndice());
+            addCarte(mapDeck[mesDeckToStringId[index]],Carte(name: carte.name,img_url_small: carte.img_url_small,img_url: carte.img_url,prix: carte.prix,id: carte.id,indice: mapSet[val.substring(0,val.length-2)]?.getIndice()));
+            print(mapDeck[mesDeckToStringId[index]]);
+            preferenceUtils.saveDecks();
+            ScaffoldMessenger.of(context)
+              ..removeCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text('Carte ajoutée !')));
           },
           child: Text('Ajouter au deck'),
         )
@@ -119,44 +129,81 @@ class _CarteDetailsState extends State<CarteDetails> {
         builder: (context, AsyncSnapshot<Map<String, dynamic>>snapshot) {
           if (snapshot.hasData) {
             listeDropdown = getListeSets(snapshot.data);
-            return Scaffold(
-              appBar: AppBar(
-                title: Text((snapshot.data?['data'][0]['name']).toString()),
-              ),
-              body: Padding(
-                padding: EdgeInsets.all(30.0),
-                child: ListView(
-                children: [
-                  Column(
-                    children: [
+            if (carte.getIndice() != null){
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text((snapshot.data?['data'][0]['name']).toString()),
+                  ),
+                  body: Padding(
+                      padding: EdgeInsets.all(30.0),
+                      child: ListView(
+                        children: [
+                          Column(
+                            children: [
 
-                      Image(
-                        height: 400,
-                        image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
-                      ),
-                      Text(
-                          snapshot.data?['data'][0]['desc']
-                      ),
+                              Image(
+                                height: 400,
+                                image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
+                              ),
+                              Text(
+                                  snapshot.data?['data'][0]['desc']
+                              ),
+                              Text(
+                                  "Set : " + snapshot.data?['data'][0]['card_sets'][carte.indice]['set_name']
+                              ),
+                            ],
 
-                      MyStatefulWidget(listeDropdown: listeDropdown,message: "Aucun set n'existe pour cette carte",setVal: setVal,),
-                      Center(
-                        child: Column(
-                          children:
-                            _createChildren(),
-                        ),
+                          )
+                        ],
                       )
-                    ],
-
                   )
-                ],
-              )
-              )
 
-            );
+              );
+            }
+            else{
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text((snapshot.data?['data'][0]['name']).toString()),
+                  ),
+                  body: Padding(
+                      padding: EdgeInsets.all(30.0),
+                      child: ListView(
+                        children: [
+                          Column(
+                            children: [
+
+                              Image(
+                                height: 400,
+                                image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
+                              ),
+                              Text(
+                                  snapshot.data?['data'][0]['desc']
+                              ),
+                              MyStatefulWidget(listeDropdown: listeDropdown,message: "Aucun set n'existe pour cette carte",setVal: setVal,),
+                              Center(
+                                child: Column(
+                                  children:
+                                  _createChildren(),
+                                ),
+                              )
+                            ],
+
+                          )
+                        ],
+                      )
+                  )
+
+              );
+            }
+
           }
           return CircularProgressIndicator();
         }
     );
+  }
+
+  void addCarte(Deck? deck,Carte carte){
+    deck?.getCartes().add(carte);
   }
 }
 
@@ -226,8 +273,9 @@ class SetCarte{
   String set_;
   String rarete;
   double prix;
+  int indice;
 
-  SetCarte({required this.idCarte,required this.set_, required this.rarete, required this.prix});
+  SetCarte({required this.idCarte,required this.set_, required this.rarete, required this.prix,required this.indice});
 
   double getPrix(){
     return prix;
@@ -243,5 +291,9 @@ class SetCarte{
 
   int getIdCarte(){
     return idCarte;
+  }
+
+  int getIndice(){
+    return indice;
   }
 }

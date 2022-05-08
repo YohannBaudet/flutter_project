@@ -5,13 +5,15 @@ class Carte  {
   final String img_url;
   final int id;
   final String prix;
+  int? indice;
 
-  const Carte({
+  Carte({
     required this.name,
     required this.img_url_small,
     required this.img_url,
     required this.id,
     required this.prix,
+    this.indice
   });
   Map toJson() => {
     'id':id,
@@ -19,6 +21,7 @@ class Carte  {
     'image_url_small': img_url_small,
     'image_url':img_url,
     'prix': prix,
+    'indice': indice
   };
 
   String getName(){
@@ -40,6 +43,10 @@ class Carte  {
     return prix;
   }
 
+  int? getIndice(){
+    return indice;
+  }
+
   static Carte fromJson(Map<String, dynamic> json) => Carte(
     id:json['id'],
     name : json['name'],
@@ -54,5 +61,6 @@ class Carte  {
     img_url_small: json['image_url_small'],
     img_url:json['image_url'],
     prix:json['prix'],
+    indice:json['indice']
   );
 }

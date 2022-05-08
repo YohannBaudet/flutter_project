@@ -37,8 +37,8 @@ class Recherche extends StatelessWidget {
           suggestionsCallback: CarteApi.getCarteSuggestions,
           itemBuilder: (context,Carte? suggestion){
             final carte = suggestion!;
-
-            if (precedent == "mesDecks"){
+            //Fonctionnalité plus utilisée
+            if (precedent == "inutilisé"){
               return ListTile(
                 leading: Image.network(
                   carte.img_url,
