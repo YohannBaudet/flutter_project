@@ -114,8 +114,7 @@ class _MesDecksState  extends State<MesDecks>{
                           },
                           onSelected: (String value){
                             if (value == "delete"){
-                              setState((){ preferenceUtils.getDeck.removeLast(); });
-                              preferenceUtils.saveDecks();
+                              showAlertDialog(context,item);
                             }
                           },
                         ),
@@ -155,6 +154,36 @@ class _MesDecksState  extends State<MesDecks>{
       MaterialPageRoute(builder: (context) => DeckDetails(deck: deck,)),
     );
     setState((){});
+  }
+  showAlertDialog(BuildContext context,Deck deck) {  // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Annuler"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Supprimer"),
+      onPressed:  () {
+        setState((){ preferenceUtils.getDeck.remove(deck); });
+        preferenceUtils.saveDecks();
+        Navigator.pop(context);
+      },
+    );  // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Suppression"),
+      content: Text("Etes-vous sur de vouloir supprimer cet article ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );  // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 
