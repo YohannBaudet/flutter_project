@@ -235,6 +235,7 @@ class _CarteDetailsState extends State<CarteDetails> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      isExpanded: true,
       value: dropdownValue,
         icon: const Icon(Icons.arrow_downward),
           elevation: 16,
