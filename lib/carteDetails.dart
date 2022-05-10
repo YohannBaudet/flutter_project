@@ -137,6 +137,7 @@ class _CarteDetailsState extends State<CarteDetails> {
                               ),
                               Container( //apply margin and padding using Container Widget.
                                 padding: EdgeInsets.symmetric(vertical :40),
+                                width: 1000,
                                 child: Text(snapshot.data?['data'][0]['desc']),
                               ),
                               Text(
@@ -169,6 +170,7 @@ class _CarteDetailsState extends State<CarteDetails> {
                               ),
                               Container( //apply margin and padding using Container Widget.
                                 padding: EdgeInsets.symmetric(vertical :40),
+                                width: 1000,
                                 child: Text(snapshot.data?['data'][0]['desc']),
                               ),
                               MyStatefulWidget(listeDropdown: listeDropdown,message: "Aucun set n'existe pour cette carte",setVal: setVal,),
