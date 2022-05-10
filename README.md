@@ -8,6 +8,22 @@
 Ce projet utilise l'API fournit par le site :
 [API Yu-Gi-Oh!](https://db.ygoprodeck.com/api-guide/)
 
+# But de l'application
+
+Yu-Gi-Oh! est un jeu de cartes en tour par tour où 2 adversaires s'affrontent (ils possèdent chacun un deck de cartes).
+Les 2 joueurs commencent le match avec 8 000 points de vie et le premier qui descend à 0 perd la partie.
+Notre application permet de :
+ - recherche d'une carte en fonction de son nom
+ - page d'information de la carte sélectionnée (description, liste de sets, rareté, prix)
+ - créer des decks
+ - ajouter/supprimer des cartes dans les decks
+ - afficher le prix total d'un deck
+
+L'intérêt de l'application est de pouvoir créer ses propres deck et de connaître le prix que l'utilisateur aurait à payer pour s'acheter ses cartes.
+Une spécificité est que pour chaque carte, on peut choisir le set de la carte.
+C'est-à-dire que chaque carte existent dans plusieurs raretés (commune, rare, ultra rare (brillante)) et sont sorti à différentes dates, souvent plus elles sont vieilles plus elles coûtent cher.
+Il y a donc également un intérêt pour les collectionneurs qui veulent connaître le prix de cartes rares ou tout simplement un jour qui veut jouer avec des cartes "plus belles".
+
 # Scénarios d'utilisation
 
 Dans cette section nous allons voir comment utiliser notre application 
