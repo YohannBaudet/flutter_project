@@ -51,7 +51,7 @@ class _MesDecksState  extends State<MesDecks>{
                     preferenceUtils.saveDecks();
                   },
                 ),),
-              Padding(
+              /*Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child:
                 IconButton(
@@ -63,7 +63,7 @@ class _MesDecksState  extends State<MesDecks>{
                     setState((){ preferenceUtils.getDeck.removeLast(); });
                     preferenceUtils.saveDecks();
                   },
-                ),)
+                ),)*/
 
             ],
           ),
@@ -97,7 +97,7 @@ class _MesDecksState  extends State<MesDecks>{
                           itemBuilder: (context) {
                             return [
                               PopupMenuItem(
-                                value: 'delete',
+                                value: "rename",
                                 child: TextFormField(
                                   initialValue: item.name,
                                   onFieldSubmitted: (String value) async {
@@ -105,8 +105,18 @@ class _MesDecksState  extends State<MesDecks>{
                                     preferenceUtils.saveDecks();
                                   },
                                 ),
+                              ),
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Text('Retirer'),
                               )
                             ];
+                          },
+                          onSelected: (String value){
+                            if (value == "delete"){
+                              setState((){ preferenceUtils.getDeck.removeLast(); });
+                              preferenceUtils.saveDecks();
+                            }
                           },
                         ),
                       ),
