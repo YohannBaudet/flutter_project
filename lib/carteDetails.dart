@@ -95,14 +95,7 @@ class _CarteDetailsState extends State<CarteDetails> {
         TextButton(
 
           onPressed: () {
-            print(mapDeck[mesDeckToStringId[index]]?.getName()); //le deck
-            print("AVANT");
-            print(val); //le set selectionne (format avec 2 espaces à la fin du string)
-            print(mapSet[val.substring(0,val.length-2)]?.getPrix()); //le setCarte
-            print("APRES");
-            print(mapSet[val.substring(0,val.length-2)]?.getIndice());
             addCarte(mapDeck[mesDeckToStringId[index]],Carte(name: carte.name,img_url_small: carte.img_url_small,img_url: carte.img_url,prix: mapSet[val.substring(0,val.length-2)]?.getPrix().toString()??'0.0',id: carte.id,indice: mapSet[val.substring(0,val.length-2)]?.getIndice()));
-            print(mapDeck[mesDeckToStringId[index]]);
             preferenceUtils.saveDecks();
             ScaffoldMessenger.of(context)
               ..removeCurrentSnackBar()
@@ -145,8 +138,9 @@ class _CarteDetailsState extends State<CarteDetails> {
                                 height: 400,
                                 image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
                               ),
-                              Text(
-                                  snapshot.data?['data'][0]['desc']
+                              Container( //apply margin and padding using Container Widget.
+                                padding: EdgeInsets.symmetric(vertical :40),
+                                child: Text(snapshot.data?['data'][0]['desc']),
                               ),
                               Text(
                                   "Set : " + snapshot.data?['data'][0]['card_sets'][carte.indice]['set_name']
@@ -176,8 +170,9 @@ class _CarteDetailsState extends State<CarteDetails> {
                                 height: 400,
                                 image: NetworkImage(snapshot.data?['data'][0]['card_images'][0]['image_url']),
                               ),
-                              Text(
-                                  snapshot.data?['data'][0]['desc']
+                              Container( //apply margin and padding using Container Widget.
+                                padding: EdgeInsets.symmetric(vertical :40),
+                                child: Text(snapshot.data?['data'][0]['desc']),
                               ),
                               MyStatefulWidget(listeDropdown: listeDropdown,message: "Aucun set n'existe pour cette carte",setVal: setVal,),
                               Center(
@@ -244,14 +239,11 @@ class _CarteDetailsState extends State<CarteDetails> {
       value: dropdownValue,
         icon: const Icon(Icons.arrow_downward),
           elevation: 16,
-          style: const TextStyle(color: Colors.deepPurple),
           underline: Container(
           height: 2,
-          color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
           setState(() {
-            print("aaaaaaaaaaaaaaaaa");
               dropdownValue = newValue!;
               setVal(dropdownValue.split('|')[0]);
         });
