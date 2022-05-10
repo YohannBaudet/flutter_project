@@ -101,7 +101,7 @@ class _CarteDetailsState extends State<CarteDetails> {
             print(mapSet[val.substring(0,val.length-2)]?.getPrix()); //le setCarte
             print("APRES");
             print(mapSet[val.substring(0,val.length-2)]?.getIndice());
-            addCarte(mapDeck[mesDeckToStringId[index]],Carte(name: carte.name,img_url_small: carte.img_url_small,img_url: carte.img_url,prix: carte.prix,id: carte.id,indice: mapSet[val.substring(0,val.length-2)]?.getIndice()));
+            addCarte(mapDeck[mesDeckToStringId[index]],Carte(name: carte.name,img_url_small: carte.img_url_small,img_url: carte.img_url,prix: mapSet[val.substring(0,val.length-2)]?.getPrix().toString()??'0.0',id: carte.id,indice: mapSet[val.substring(0,val.length-2)]?.getIndice()));
             print(mapDeck[mesDeckToStringId[index]]);
             preferenceUtils.saveDecks();
             ScaffoldMessenger.of(context)
