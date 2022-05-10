@@ -6,9 +6,6 @@ import 'package:flutter_project/Carte.dart';
 
 import 'Deck.dart';
 
-//import 'ListeDetailCarte.dart';
-//import 'api/carte_details_api.dart';
-
 class CarteDetails extends StatefulWidget {
   CarteDetails({Key? key, required this.carte}) : super(key: key);
   final Carte carte;
