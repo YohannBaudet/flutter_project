@@ -44,7 +44,7 @@ class _DeckDetailsState extends State<DeckDetails> {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(0,6,0,5),
-            child: Text("Prix du deck : "+deck.getPrixDeck().toString()),
+            child: Text("Prix du deck : "+deck.getPrixDeck().toStringAsFixed(2)),
           ),
           Expanded(child: GridView.builder(
             scrollDirection: Axis.vertical,
