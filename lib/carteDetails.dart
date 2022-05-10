@@ -197,7 +197,10 @@ class _CarteDetailsState extends State<CarteDetails> {
             }
 
           }
-          return CircularProgressIndicator();
+          return Center(
+            child: Container(
+                child: CircularProgressIndicator()),
+          );
         }
     );
   }
